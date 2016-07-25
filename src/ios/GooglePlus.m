@@ -42,8 +42,40 @@ static void swizzleMethod(Class class, SEL destinationSelector, SEL sourceSelect
     }
 }
 
-- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary *)options { return [[GIDSignIn sharedInstance] handleURL:url sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey] annotation:options[UIApplicationOpenURLOptionsAnnotationKey]]; }
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url
+options:(NSDictionary<NSString*, id> *)options {
+        return [[FBSDKApplicationDelegate sharedInstance] application:app
+                                                              openURL:url
 
+sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+
+annotation:options[UIApplicationOpenURLOptionsAnnotationKey]]
+                || [[GIDSignIn sharedInstance] handleURL:url
+
+sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+
+annotation:options[UIApplicationOpenURLOptionsSourceApplicationKey]];
+    }
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL
+*)url sourceApplication:(NSString *)sourceApplication
+annotation:(id)annotation
+    {
+
+            return [[FBSDKApplicationDelegate sharedInstance]
+application:application
+                                                              openURL:url
+
+sourceApplication:sourceApplication
+                                                           annotation:annotation
+                     ] ||
+                    [[GIDSignIn sharedInstance] handleURL:url
+
+sourceApplication:sourceApplication
+                                                     annotation:annotation];
+       }
+
+    
 @end
 
 @implementation GooglePlus
